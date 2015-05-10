@@ -2,3 +2,5 @@ data/*
 oringinal_data/
 input/*
 output/*
+*.xlsx
+*.csv
