@@ -4,3 +4,4 @@ input/*
 output/*
 *.xlsx
 *.csv
+data.py
