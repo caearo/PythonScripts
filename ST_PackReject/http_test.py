@@ -52,21 +52,25 @@ class Pack(object):
 		self.priority = priority
 	
 	def print_pack_info(self):
-		print '%s %s:%s, priority:%s' % ( self.pack_id, self.pack_name, self.is_available, self.priority)
-		pass
+		print '%s %s:%s, priority:%s' % ( self.pack_id.ljust(2), self.pack_name.rjust(50), self.is_available, self.priority)
+
+	def get_priority(self):
+		return self.priority
+
 
 def parse_flow_result(json_string):
-	pack_list = []
+	pack_list = {}
 	dc = json.loads(json_string)
 	packs_string = json.dumps( dc['offers'] )
 	packs =  json.loads(packs_string)
 
 	for pack in packs:
 		pk = Pack(pack['prodID'].encode('utf-8'), pack['sign'].encode('utf-8'), pack['priority'].encode('utf-8'))
-		pk.print_pack_info()
-		pack_list.append(pk)
 
-		return pack_list
+		# 1 key : multi-value, and every value is a Pack object.
+		pack_list.setdefault(int(pk.get_priority()), []).append(pk)
+
+	return pack_list
 
 def main():
 	url = data.url + ('18923090380' if len(sys.argv)<2 else sys.argv[1])
@@ -77,10 +81,11 @@ def main():
 		print m.errcode, m.errmsg
 	else:
 		print resp[resp.find('<')+len('<br/>'):]
-		packs = parse_flow_result(resp[:resp.find('<')].strip())
-		for p in packs:
-
-			pass
+		packs = parse_flow_result(resp[resp.find('{'):resp.find('<')].strip())
+		sorted_packs = sorted(packs.iteritems(), key = lambda pack:pack[0], reverse=False)
+		for pack_tupele in sorted_packs:
+			for pk in pack_tupele[1]:
+				pk.print_pack_info()
 
 
 if __name__ == '__main__':
