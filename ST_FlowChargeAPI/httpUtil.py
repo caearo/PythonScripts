@@ -24,7 +24,6 @@ class NetUtil(object):
 		else:
 			conn = httplib.HTTPConnection(domain, port, timeout)
 
-		print 'string',query_string
 		conn.request(u'GET', query_string)
 
 		resp = conn.getresponse()
@@ -53,8 +52,9 @@ class NetUtil(object):
 		else:
 			conn = httplib.HTTPConnection(domain, port, timeout)
 
-		#ps = urllib.quote(ps)
-		print ps
+		if type({}) == type(ps): 
+			ps = urllib.urlencode(ps) # Connect parameters into format 'val1&val2&val3'
+
 		conn.request('POST', query_string, ps, headers)
 		resp = conn.getresponse()
 		status = resp.status

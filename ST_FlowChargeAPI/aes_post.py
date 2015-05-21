@@ -11,6 +11,10 @@ def encrypt_mode_cbc(data, key = 'H5gOs1ZshKZ6WikN', iv = '8888159601152533'):
     result = obj.encrypt(data)
     return result.encode('hex')
 
+
+def hex2dec(string_num):
+    return str(int(string_num.upper(), 16))
+
 #aes加密得到16进制串转2进制
 def hex2bin(string_num):
     return dec2bin(hex2dec(string_num.upper()))
@@ -27,7 +31,7 @@ def dec2bin(string_num):
     return ''.join([str(x) for x in mid[::-1]])
 
 
-#2进制按电信规则16进制加密   
+#2进制按规则16进制加密   
 def encodeBytes(bytelist):
     pieces = len(bytelist) / 8
     in_list = [int(bytelist[i*8:(i+1)*8],2) for i in range(pieces)]
@@ -65,11 +69,3 @@ def _postJson(json_str):
             buf.close()
             logging.error('api timeout')
             return None
-
-def main():
-    test_msg_dic1 = "{\"partner_no\":\"100054374\",\"code\":\"kdhgopclbjhfgkaceegofdkkhjpiilgakkbhllgjjomgfohclnaehcccaogbeikijceabpkcbbnaobmnbogifekhppomhopgiocofajbhofkikgmneibdhppnlhkddlmhjnmeildgfhppdclofpciainlhkhppbliihmhbdofplgblfoffepgnjgbebchaddkopkeifpjjjfonemigbbnejibcmkhellfhlcfocfjcecmdpmlgifheiihanckaaifcjaaaajkccnakjmdgkcaddbfifceknpmmdmkcgilgoclofmckcfjdcnaimccagffkplmoekclbelgkhbccomgamehkjhgnpoigikcgobolfpddcahcfpdagadljhpnhagamkeoahfdbkepbpcagdeeloppicfma\"}"
-    print _postJson(test_msg_dic1)
-
-
-if __name__ == '__main__':
-    main()
