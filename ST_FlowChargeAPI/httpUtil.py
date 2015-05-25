@@ -38,7 +38,7 @@ class NetUtil(object):
 		conn.close()
 		return data
 
-	def http_post(self, url, ps={}, timeout=5, is_https=False):
+	def http_post(self, url, ps={}, timeout=60, is_https=False):
 		headers = {"Content-type": "application/json","Accept": "text/plain"}
 		domain = port = query_string = data = ''
 		o = urlparse(url)
