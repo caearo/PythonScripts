@@ -31,7 +31,7 @@ def process_one(phone, prod_id):
 	reqNO = time.strftime('%Y%m%d%H%M%S',time.localtime()) + str(random.randint(10000,99999)) # String 20
 
 	codeString = data.get_post_params(reqNO, phone, prod_id)
-	print codeString
+	if _DEBUG_:	print codeString
 	codeString = ap.encrypt_mode_cbc(codeString, data.aes_key, data.aes_iv)
 	codeString = ap.hex2bin(codeString)
 	codeString = ap.encodeBytes(codeString)
@@ -70,7 +70,7 @@ def parse_json(string):
 
 
 def main():
-	print "**Debuge:%d\n**" % _DEBUG_
+	print "********\n** Debuge:%d\n** Order Type:%s\n********" % (_DEBUG_, data.order_type)
 	file_list = get_all_files(sys.argv[1])
 	file_str = '\n'.join(file_list)
 	if 'y' == raw_input(file_str+'\n?y/n '): # File should be named in '100.txt 200.txt 500.txt'
@@ -100,12 +100,15 @@ def main():
 				res_string = '%s,%s,%s,%s\n' % (usr, prod_id, request_no, result_code)
 				if 0 == i%20 :
 					print 'num %d: %s' % (i, res_string)
-				print res_string
+				if _DEBUG_:	print res_string
 				wf.writelines(res_string)
+				wf.flush()
 
 	wf.close()
 
-def test_cakk_bak():
+
+# Test callback interface.
+def test_cabk_bak():
 	string = '{"request_no":"123test","result_code":"00000"}'
 	m = hu()
 	resp = m.http_post(data.url_cb, string)
